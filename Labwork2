@@ -13,7 +13,7 @@ with open("arr.txt") as c:
         for i in one_line: #каждое число из списка обрабатываем
             res=re.findall(r'[-0-9A-Fa-f]*[aA][0-9A-Fa-f]{2}', i) #проверяем, являются ли символы символами 16-ричного числа
             if (len(res)==1 and len(i)==len(res[0])) and len(i)>=3:
-                if lastNumber=='0': #если это первое число последовательности
+                if lastNumber=='0': #если это первое подходящее число файла
                     lastNumber=i
                     MaxNumber=i
                     print(MaxNumber, end=' ')
