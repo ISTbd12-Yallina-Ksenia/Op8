@@ -1,0 +1,41 @@
+import re
+with open("arr.txt") as c:
+    allowedSymbols={'-':'-','0':'ноль', '1':'один', '2':'два','3':'три', '4':'четыре', '5':'пять', '6':'шесть',
+                    '7': 'семь', '8': 'восемь', '9':'девять', 'A':'десять', 'B':'одиннадцать', 'C':'двенадцать', 'D': 'тринадцать',
+                    'E': 'четырнадцать', 'F': 'пятнадцать', 'a':'десять', 'b':'одиннадцать', 'c':'двенадцать', 'd':'тринадцать', 'e':'четырнадцать', 'f':'пятнадцать'} 
+    keys_symbols=list(allowedSymbols.keys())
+    one_line = re.split('[,. \s]+', c.readline()) #числа могут быть разделены по-разному, сохраняем их в список как строки
+    if '' in one_line and len(one_line)==1: #если в списке только пустой символ, то в файле ничего нет
+        print("Пустой файл")
+    lastNumber = '0' #последнее сохраненное число последовательности
+    MaxNumber='0' #максимальное число последовательности
+    while True:
+        for i in one_line: #каждое число из списка обрабатываем
+            res=re.findall(r'[-0-9A-Fa-f]*[aA][0-9A-Fa-f]{2}', i) #проверяем, являются ли символы символами 16-ричного числа
+            if (len(res)==1 and len(i)==len(res[0])) and len(i)>=3:
+                if lastNumber=='0': #если это первое число последовательности
+                    lastNumber=i
+                    MaxNumber=i
+                    print(MaxNumber, end=' ')
+                    continue
+                if int(i, base=16)<int(lastNumber, base=16): #сравнение чисел
+                    lastNumber=i
+                    print(lastNumber, end=' ')
+                else: #если встретилось число, которое больше предыдущего, то последов-ть закончилась, выводим ее на экран и выводим ее максим.число прописью
+                    print('')
+                    for j in MaxNumber:
+                            print(allowedSymbols[j], end=',')
+                    print('\n')
+                    lastNumber=i
+                    MaxNumber=i
+                    print(MaxNumber, end=' ')
+        if '' in one_line and len(one_line)==1: #если достигнут конец файла, обрабатываем последнюю последовательность и завершаем
+            print('')
+            if MaxNumber!='0':
+                for j in MaxNumber:
+                    print(allowedSymbols[j], end=',')
+            break
+        one_line = re.split('[,. \s]+', c.readline())
+if MaxNumber=='0':
+    print("Нет нужных чисел")
+print("\nКонец.")
